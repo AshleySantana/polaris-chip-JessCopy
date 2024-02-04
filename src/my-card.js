@@ -14,23 +14,38 @@ export class MyCard extends LitElement {
   constructor() {
     super();
     this.title = "My card";
+    this.link = '#';
   }
 
   static get styles() {
     return css`
       :host {
-        display: block;
+        display: inline-flex;
+      }
+      
+      span {
+        background-color: blue;
+        color: black;
+        font-size: 24px;
+        padding: 16px;
+        margin: 8px;
+      }
+
+      span:hover {
+        background-color: grey;
+        border: 1px solid black;
       }
     `;
   }
 
   render() {
-    return html`<div>${this.title}</div>`;
+    return html`<a href="$(this.link)"></a></a><span>${this.title}</span></a>`;
   }
 
   static get properties() {
     return {
       title: { type: String },
+      link: { type: String },
     };
   }
 }
