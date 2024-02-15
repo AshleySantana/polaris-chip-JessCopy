@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import "@lrnwebcomponents/meme-maker/meme-maker.js";
 
 /**
  * Now it's your turn. Here's what we need to try and do
@@ -15,6 +16,8 @@ export class MyCard extends LitElement {
     super();
     this.title = "Koala";
     this.link = '#';
+    this.fancy = false;
+    
   }
 
   static get styles() {
@@ -129,6 +132,13 @@ export class MyCard extends LitElement {
   width: 150px;
   height: 50px  
 }
+
+:host([fancy]) {
+display: block;
+  background-color: pink;
+  border: 2px solid fuchsia;
+  box-shadow: 10px 5px 5px red;
+}
     `;
   }
 
@@ -140,7 +150,8 @@ export class MyCard extends LitElement {
         <div class="about-koala">
           <p>The image shows a koala in a tree. I named it Fredrick. (I know, very cool!)</p>
           <div img class="koala">
-            <img class="koala-image" src=https://www.wwf.org.uk/sites/default/files/styles/max_650x650/public/2022-05/_WW236934.jpg?itok=JlG-1l9V  alt=koala>
+            <!-- <img class="koala-image" src=https://www.wwf.org.uk/sites/default/files/styles/max_650x650/public/2022-05/_WW236934.jpg?itok=JlG-1l9V  alt=koala> -->
+          <meme-maker image-url="https://cdn2.thecatapi.com/images/9j5.jpg"></meme-maker>
           </div>
           <div class="btn-wrapper">
                 <a href="https://hax.psu.edu">
@@ -157,7 +168,13 @@ export class MyCard extends LitElement {
     <button class="changeimage">Change Image</button>
     <button class="changebg">Change background</button>
     <button class="deletecard">Delete Card</button>
-  </div>`;
+  </div>
+  <details ?open="${this.fancy}">
+  <summary>Description</summary>
+  <div>
+    <slot>${this.description}</slot>
+  </div>
+</details>`;
 
    
   }
@@ -166,6 +183,7 @@ export class MyCard extends LitElement {
     return {
       title: { type: String },
       link: { type: String },
+      fancy: { type: Boolean, reflect: true }
     };
   }
 }
