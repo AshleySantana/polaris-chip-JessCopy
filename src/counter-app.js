@@ -14,13 +14,16 @@ export class CounterApp extends LitElement {
 
   constructor() {
     super();
-    this.title="Counter";
+    this.title="Basic Counter";
     this.value=0;
+    this.name="Cool Counter"
+    this.num=0;
     
   }
 
   static get styles() {
     return css`
+
     .counter-app {
       background-color: purple;
       width: 400px;
@@ -29,32 +32,80 @@ export class CounterApp extends LitElement {
       font-size: 30px;
     }
 
+
     .add {
-      width: 1000px;
-      display: flex;
+      background: blue;
+      width: 100px;
       border-radius: 20px;
       font-size: 40px;
     }
 
     .subtract{
-      width: 1000px;
-      display: flex;
-      padding: 5%;
+      background: blue;;
+      width: 100px;
+      border-radius: 20px;
       font-size: 40px;
     }
+
+    .cool-counter {
+      background-color: purple;
+      width: 400px;
+      padding: 5%;
+      margin: 5%;
+      font-size: 30px;
+    }
+
+    .increase {
+      background: blue;
+      width: 100px;
+      border-radius: 20px;
+      font-size: 40px;
+    }
+
+    .decrease{
+      background: blue;;
+      width: 100px;
+      border-radius: 20px;
+      font-size: 40px;
+    }
+
+    .increase:hover {
+      background-color: grey;
+      border: 1px solid black;
+    }
     
+    .decrease:hover {
+      background-color: grey;
+      border: 1px solid black;
+    }
     `;
   }
 
+  add(){
+    if(this.value < 20){
+      this.value -= 1;
+    }
+  }
+
+  subtract(){
+    if(this.value > 0){
+      this.value -= 1;
+    }
+  }
+
   increase(){
-    if(this.value < 20) {
-      this.value += 1;
+    if(this.num < 20) {
+      this.num += 1;
+    }
+
+    if(this.num === 18) {
+      this.num.style.color = yellow;
     }
   }
 
   decrease(){
-    if(this.value > 0){
-      this.value -= 1;
+    if(this.num > 0){
+      this.num -= 1;
     }
   }
 
@@ -63,9 +114,17 @@ export class CounterApp extends LitElement {
     <div class="counter-app">
       <h3 class="header">${this.title}</h3>
       <h2 class="value">${this.value}</h2>
-      <button class="+" @click="${this.increase}">add</button>
-      <button class="-" @click="${this.decrease}">subtract</button>
+      <button class="add" @click="${this.add}">+</button>
+      <button class="subtract" @click="${this.subtract}">-</button>
     </div>
+
+    <div class="cool-counter">
+      <h3 class="header">${this.name}</h3>
+      <h2 class="value">${this.num}</h2>
+      <button class="increase" @click="${this.increase}">+</button>
+      <button class="decrease" @click="${this.decrease}">-</button>
+    </div>
+
   `;
 
    
@@ -74,7 +133,9 @@ export class CounterApp extends LitElement {
   static get properties() {
     return {
       title: { type: String},
-      value: { type: Number} 
+      value: { type: Number},
+      name: { type: String},
+      num: { type: Number}  
     };
   }
 }
