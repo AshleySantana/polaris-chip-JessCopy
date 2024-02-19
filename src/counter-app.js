@@ -83,7 +83,7 @@ export class CounterApp extends LitElement {
 
   add(){
     if(this.value < 20){
-      this.value -= 1;
+      this.value += 1;
     }
   }
 
@@ -97,16 +97,14 @@ export class CounterApp extends LitElement {
     if(this.num < 20) {
       this.num += 1;
     }
-
-    if(this.num === 18) {
-      this.num.style.color = yellow;
-    }
   }
 
   decrease(){
     if(this.num > 0){
       this.num -= 1;
     }
+
+  
   }
 
   render() {
