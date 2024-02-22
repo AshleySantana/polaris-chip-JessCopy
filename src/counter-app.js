@@ -91,8 +91,8 @@ export class CounterApp extends LitElement {
   }
  
   updated(changedProperties) {
-    if(changedProperties.has(value)) {
-      if(this.value == 21) {
+    if(changedProperties.has("value")) {
+      if(this.value === 21) {
         this.makeItRain();
       }
     }
@@ -108,10 +108,12 @@ export class CounterApp extends LitElement {
 
     return html`
     <div class="counter-app">
-      <h3 class="header">${this.title}</h3>
-      <h2 class="value" style="color: ${color}">${this.value}</h2>
-      <button class="add" @click="${this.add}" ?disabled="${this.max===this.value}">+</button>
-      <button class="subtract" @click="${this.subtract}" ?disabled="${this.min===this.value}">-</button>
+      <confetti-container id="confetti">
+        <h3 class="header">${this.title}</h3>
+        <h2 class="value" style="color: ${color}">${this.value}</h2>
+        <button class="add" @click="${this.add}" ?disabled="${this.max===this.value}">+</button>
+        <button class="subtract" @click="${this.subtract}" ?disabled="${this.min===this.value}">-</button>
+      </confetti-container>
     </div>
 
   `;
