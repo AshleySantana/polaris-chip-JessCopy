@@ -1,11 +1,5 @@
 import { LitElement, html, css } from 'lit';
 
-
-/**
- * Now it's your turn. Here's what we need to try and do
- * 1. 
- */
-
 export class AlertApp extends LitElement {
 
   static get tag() {
@@ -14,39 +8,68 @@ export class AlertApp extends LitElement {
 
   static get properties() {
     return {
-        fancy: { type: Boolean, reflect: true }
+        title: { type: String},
+        fancy: { type: Boolean, reflect: true},
+        opened: {type: Boolean, reflect: true},
+        date: {type: String},
+        description: {type: String}
       
     };
   }
 
   constructor() {
     super();
-    this.fancy=false;
+    this.title="ALERT";
+    this.opened = false;
+    this.date="07-14-2004"
   }
 
   static get styles() {
     return css`
-    .alert-app {
+
+    .background-container-closed {
       background-color: red;
-      width: 400px;
+      width: 1420px;
       height: 100px;
       padding: 5%;
-      margin: 5%;
       font-size: 30px;
     }
+
+    .background-container-open {
+      background-color: yellow;
+      width: 1420px;
+      height: 100px;
+      padding: 5%;
+      font-size: 30px;
+    }
+
     `;
   }
 
-  
+  openView(){
+    return html`
+    <div class="background-container-open">
+      <summary>Description</summary>
+      <div>
+        <slot>${this.description}</slot>
+      </div>
+    </div>
+    
+    `;
+  }
+
+  closedView(){
+    return html`
+    <div class="background-container-closed">
+      <h3 class="header">${this.title}</h3>
+    </div>
+    `;
+  }
+
+
 
   render() {
-    
-
-    return html`
-    <div class="alert-app">
-    </div>
-
-  `;
+    return (this.opened) ? this.openView() : this.closedView(); 
   }
 
   
