@@ -9,70 +9,59 @@ export class AlertApp extends LitElement {
   static get properties() {
     return {
         title: { type: String},
-        fancy: { type: Boolean, reflect: true},
-        opened: {type: Boolean, reflect: true},
-        date: {type: String},
-        description: {type: String}
-      
+        opened: { type: Boolean, reflect: true},
+        date: { type: String},
     };
   }
 
   constructor() {
     super();
-    this.title="ALERT";
+    this.title = "ALERT";
     this.opened = false;
-    this.date="07-14-2004"
+    this.date = "07-14-2004";
   }
 
   static get styles() {
     return css`
+      .background-container {
+        display: flex;
+        background-color: red;
+        width: 1420px;
+        height: 100px;
+        padding: 5%;
+        font-size: 30px;
+      }
 
-    .background-container-closed {
-      background-color: red;
-      width: 1420px;
-      height: 100px;
-      padding: 5%;
-      font-size: 30px;
-    }
-
-    .background-container-open {
-      background-color: yellow;
-      width: 1420px;
-      height: 100px;
-      padding: 5%;
-      font-size: 30px;
-    }
-
+      .opened-btn, .closed-btn {
+        font-size: 50x;
+        border-radius: 30px;
+        width: 100px;
+        height: 50px; 
+      }
     `;
   }
 
-  openView(){
-    return html`
-    <div class="background-container-open">
-      <summary>Description</summary>
-      <div>
-        <slot>${this.description}</slot>
-      </div>
-    </div>
-    
-    `;
+  toggle() {
+    this.opened = !this.opened;
   }
 
-  closedView(){
-    return html`
-    <div class="background-container-closed">
-      <h3 class="header">${this.title}</h3>
-    </div>
-    `;
+  click() {
+    this.toggle();
   }
-
-
 
   render() {
-    return (this.opened) ? this.openView() : this.closedView(); 
+    return html`
+      <button class="${this.opened ? 'closed-btn' : 'open-btn'}" @click="${this.click}">
+        ${this.opened ? 'Close' : 'Open'}
+      </button>
+      ${this.opened ? html`
+        <div class="background-container"> 
+          <slot> alert info</slot>
+        </div>
+      ` : ''}
+    `;
   }
 
-  
 }
 
-globalThis.customElements.define(AlertApp.tag, AlertApp);
+customElements.define(AlertApp.tag, AlertApp);
