@@ -11,21 +11,23 @@ export class AlertApp extends LitElement {
         title: { type: String},
         opened: { type: Boolean, reflect: true},
         date: { type: String},
+        bc: { type: String}
     };
   }
 
   constructor() {
     super();
-    this.title = "ALERT";
-    this.opened = false;
-    this.date = "07-14-2004";
+    this.title="ALERT";
+    this.opened=false;
+    this.date="07-14-2004";
+    this.bc="red";
   }
 
   static get styles() {
     return css`
       .background-container {
         display: flex;
-        background-color: red;
+        background-color: white;
         width: 1420px;
         height: 100px;
         padding: 5%;
