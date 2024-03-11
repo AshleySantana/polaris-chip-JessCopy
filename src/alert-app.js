@@ -32,7 +32,7 @@ export class AlertApp extends LitElement {
         font-size: 30px;
       }
 
-      .opened-btn, .closed-btn {
+      .open-btn, .closed-btn {
         font-size: 50x;
         border-radius: 30px;
         width: 100px;
