@@ -11,7 +11,7 @@ export class AlertApp extends LitElement {
         title: { type: String},
         opened: { type: Boolean, reflect: true},
         date: { type: String},
-        bc: { type: String}
+        sticky: { type: Boolean, reflect: true}
     };
   }
 
@@ -20,14 +20,20 @@ export class AlertApp extends LitElement {
     this.title="ALERT";
     this.opened=false;
     this.date="07-14-2004";
-    this.bc="red";
+    this.sticky=false;
   }
 
   static get styles() {
     return css`
+      :host([sticky]){
+        top: 0;
+        position: sticky;
+        z-index: 2;
+      }
+
       .background-container {
         display: flex;
-        background-color: white;
+        background-color: yellow;
         width: 1420px;
         height: 100px;
         padding: 5%;
@@ -52,6 +58,7 @@ export class AlertApp extends LitElement {
   }
 
   render() {
+    var color = "red";
     return html`
       <button class="${this.opened ? 'closed-btn' : 'open-btn'}" @click="${this.click}">
         ${this.opened ? 'Close' : 'Open'}
@@ -61,6 +68,11 @@ export class AlertApp extends LitElement {
           <slot> alert info</slot>
         </div>
       ` : ''}
+      <style>
+        .background-container {
+          background-color: ${color};
+        }
+      </style>
     `;
   }
 
