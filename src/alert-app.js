@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 
+
 export class AlertApp extends LitElement {
 
   static get tag() {
