@@ -12,6 +12,7 @@ export class HaxcmsPartyUi extends LitElement {
     return {
       delete: {type: Boolean, reflect: true},
       character: {type: Array},
+      yesDelete: {type: Boolean},
     };
   }
 
@@ -19,14 +20,26 @@ export class HaxcmsPartyUi extends LitElement {
     super();
     this.character = [];
     this.delete = false;
+    this.yesDelete = false;
   }
 
   static get styles() {
     return css`
-    .delete{
-      display: none;
-    }
-      
+      /* .character{
+
+      }
+
+      .add{
+
+      }
+
+      .delete{
+
+      }
+
+      .submit{
+
+      } */
     `;
   }
 
@@ -36,8 +49,17 @@ export class HaxcmsPartyUi extends LitElement {
     this.requestUpdate();
   }
 
-  deleteUser() {
-    this.character.indexOf()
+  deleteUser(e) {
+    this.delete = true;
+    this.requestUpdate();
+    var id = e.target.id;
+    var position = this.character.indexOf(id);
+    this.character.splice(position, 1);
+  }
+
+  confirmationYes(){
+    
+
   }
 
 
@@ -47,6 +69,8 @@ export class HaxcmsPartyUi extends LitElement {
       <div class="character"> 
         ${this.character.map(name => html`
           <rpg-character seed="${name}"></rpg-character>
+          <button id=${name} class="button" @click="${this.deleteUser}">Delete</button>
+          <confirmation-message class="confirmation-message ${this.delete == true ? "delete" : ""}"></confirmation-message>
           `)}
       </div>
       <div class="add-user">
@@ -55,10 +79,8 @@ export class HaxcmsPartyUi extends LitElement {
         <button class="add" @click=${this.addUser}>Add</button>
       </div>
       <div class="user-actions">
-        <button class="button">Delete</button>
         <button class="submit">Submit</button>
       </div>
-      <confirmation-message class="confrimation-message ${this.delete == true ? "delete" : ""}"></confirmation-message>
     </div>
     `;
   }

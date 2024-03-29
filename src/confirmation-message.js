@@ -21,18 +21,20 @@ export class ConfirmationMessage extends LitElement {
     `;
   }
 
+  yes() { 
+    this.dispatchEvent(new CustomEvent('confirmationYes'));
+  }
+
 
   render() {
     return html`
     <div class="confirmation-message">
       <button class="exit-message">X</button>
       <div class="message-wrapper">
-        
         <p>Are you sure you want to delete user?</p>
-        <button>Yes</button>
+        <button @click="${this.yes}">Yes</button>
         <button>No</button>
       </div>
-
     </div>
     `;
   }
