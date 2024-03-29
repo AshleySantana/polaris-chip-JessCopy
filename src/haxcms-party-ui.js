@@ -12,7 +12,7 @@ export class HaxcmsPartyUi extends LitElement {
     return {
       delete: {type: Boolean, reflect: true},
       character: {type: Array},
-      yesDelete: {type: Boolean},
+      confirmed: {type: Boolean, reflect: true}
     };
   }
 
@@ -20,7 +20,7 @@ export class HaxcmsPartyUi extends LitElement {
     super();
     this.character = [];
     this.delete = false;
-    this.yesDelete = false;
+    this.confirmed = false; 
   }
 
   static get styles() {
@@ -50,16 +50,24 @@ export class HaxcmsPartyUi extends LitElement {
   }
 
   deleteUser(e) {
+    console.log("is it coming here")
     this.delete = true;
     this.requestUpdate();
-    var id = e.target.id;
-    var position = this.character.indexOf(id);
-    this.character.splice(position, 1);
+    if(this.confirmed===true){
+      var id = e.target.id;
+      var position = this.character.indexOf(id);
+      this.character.splice(position, 1);
+      this.confirmed = false;
+    }else{
+      this.delete=false;
+      this.requestUpdate();
+      return;
+    }
   }
 
-  confirmationYes(){
-    
-
+  confirmedYes() {
+    this.confirmed = true; 
+    this.requestUpdate();
   }
 
 
@@ -70,7 +78,9 @@ export class HaxcmsPartyUi extends LitElement {
         ${this.character.map(name => html`
           <rpg-character seed="${name}"></rpg-character>
           <button id=${name} class="button" @click="${this.deleteUser}">Delete</button>
-          <confirmation-message class="confirmation-message ${this.delete == true ? "delete" : ""}"></confirmation-message>
+          <confirmation-message 
+            class="confirmation-message ${this.delete == true ? "delete" : ""}" 
+            @confirmationYes="${this.confirmedYes}"></confirmation-message>
           `)}
       </div>
       <div class="add-user">
