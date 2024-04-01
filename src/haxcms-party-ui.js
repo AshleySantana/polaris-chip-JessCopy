@@ -2,6 +2,8 @@ import { LitElement, html, css } from 'lit';
 import { ConfirmationMessage } from './confirmation-message.js';
 import "@lrnwebcomponents/rpg-character/rpg-character.js";
 
+
+
 export class HaxcmsPartyUi extends LitElement {
 
   static get tag() {
@@ -10,88 +12,109 @@ export class HaxcmsPartyUi extends LitElement {
 
   static get properties() {
     return {
-      delete: {type: Boolean, reflect: true},
-      character: {type: Array},
-      confirmed: {type: Boolean, reflect: true}
+      character: { type: Array },
+      deleteUserPending: { type: Boolean },
+      userToDelete: { type: String }
     };
   }
 
   constructor() {
     super();
     this.character = [];
-    this.delete = false;
-    this.confirmed = false; 
+    this.deleteUserPending = false;
+    this.userToDelete = '';
   }
 
   static get styles() {
     return css`
-      /* .character{
-
+      :host {
+        display: flex;
+        padding: 10px;
       }
 
-      .add{
-
+      .user {
+        background-color: white;
+        display: flex-wrap;
       }
 
-      .delete{
-
+      .character {
+        /* shows background color for each user only if "display" is not present */
+        background-color: #3467de;
+        width: 170px;
+        padding: 4px;
+        display: flex;
       }
 
-      .submit{
-
-      } */
+      .add-user {
+        display: flex;
+        font-size: 50px;
+        border-radius: 20px;
+        width: 150px;
+        height: 50px;
+        padding: 5px;
+      }
+      
+      .add {
+        padding: 2%;
+      }
     `;
   }
 
-  addUser(){
+
+  addUser() {
     const user = this.shadowRoot.querySelector("#username").value;
     this.character.push(user);
     this.requestUpdate();
   }
 
   deleteUser(e) {
-    console.log("is it coming here")
-    this.delete = true;
-    this.requestUpdate();
-    if(this.confirmed===true){
-      var id = e.target.id;
-      var position = this.character.indexOf(id);
-      this.character.splice(position, 1);
-      this.confirmed = false;
-    }else{
-      this.delete=false;
-      this.requestUpdate();
-      return;
-    }
+    const id = e.target.id;
+    this.userToDelete = id;
+    this.deleteUserPending = true;
   }
 
   confirmedYes() {
-    this.confirmed = true; 
+    const position = this.character.indexOf(this.userToDelete);
+    if (position !== -1) {
+      this.character.splice(position, 1);
+      this.userToDelete = '';
+      this.deleteUserPending = false;
+      this.requestUpdate();
+    }
+  }
+
+  confirmedNo() {
+    this.userToDelete = '';
+    this.deleteUserPending = false;
     this.requestUpdate();
   }
 
-
   render() {
     return html`
-    <div class="user">
-      <div class="character"> 
-        ${this.character.map(name => html`
-          <rpg-character seed="${name}"></rpg-character>
-          <button id=${name} class="button" @click="${this.deleteUser}">Delete</button>
-          <confirmation-message 
-            class="confirmation-message ${this.delete == true ? "delete" : ""}" 
-            @confirmationYes="${this.confirmedYes}"></confirmation-message>
+      <div class="user">
+        <div class="character"> 
+          ${this.character.map(name => html`
+            <rpg-character seed="${name}"></rpg-character>
+            <button id=${name} class="button" @click="${this.deleteUser}">Delete</button>
+            ${this.deleteUserPending && name === this.userToDelete ?
+              html`
+              <confirmation-message 
+                class="confirmation-message" 
+                @confirmationYes="${this.confirmedYes}" 
+                @confirmationNo="${this.confirmedNo}" 
+              ></confirmation-message>`
+              : ''
+            }
           `)}
+        </div>
+        <div class="add-user">
+          <input type="text" id="username" placeholder="Type user">
+          <button class="add" @click=${this.addUser}>Add</button>
+        </div>
+        <div class="user-actions">
+          <button class="submit">Submit</button>
+        </div>
       </div>
-      <div class="add-user">
-        <label for="username">Type username</label>
-        <input type="text" id="username">
-        <button class="add" @click=${this.addUser}>Add</button>
-      </div>
-      <div class="user-actions">
-        <button class="submit">Submit</button>
-      </div>
-    </div>
     `;
   }
 
