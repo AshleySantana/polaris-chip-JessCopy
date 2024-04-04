@@ -1,10 +1,11 @@
 import { LitElement, html, css } from 'lit';
+import { DDD } from "@lrnwebcomponents/d-d-d/d-d-d.js";
 import { ConfirmationMessage } from './confirmation-message.js';
 import "@lrnwebcomponents/rpg-character/rpg-character.js";
 
 
 
-export class HaxcmsPartyUi extends LitElement {
+export class HaxcmsPartyUi extends DDD {
 
   static get tag() {
     return 'haxcms-party-ui';
@@ -29,20 +30,38 @@ export class HaxcmsPartyUi extends LitElement {
     return css`
       :host {
         display: flex;
+        flex-direction: column;
         padding: 10px;
       }
 
+      rpg-character{
+        height: 60%;
+        width: 60%;
+      }
+
       .user {
-        background-color: white;
         display: flex-wrap;
       }
 
-      .character {
-        /* shows background color for each user only if "display" is not present */
-        background-color: #3467de;
-        width: 170px;
-        padding: 4px;
+      .characterContainer {
         display: flex;
+        flex-direction: column;
+        background-color: var(--ddd-theme-default-keystoneYellow);
+        margin: 10px;
+        border-right:8px;
+        height: 200px;
+        width: 200px;
+        align-items: center;
+      }
+
+      .spacer {
+        height: 100px;
+      }
+
+      .characterRow{
+        display: flex;
+        flex-direction: row;
+        width: 800px;
       }
 
       .add-user {
@@ -57,6 +76,10 @@ export class HaxcmsPartyUi extends LitElement {
       .add {
         padding: 2%;
       }
+
+      .button {
+        width: 100%;
+      }
     `;
   }
 
@@ -65,6 +88,7 @@ export class HaxcmsPartyUi extends LitElement {
     const user = this.shadowRoot.querySelector("#username").value;
     this.character.push(user);
     this.requestUpdate();
+    // this.shadowRoot.querySelector('#username')
   }
 
   deleteUser(e) {
@@ -91,11 +115,18 @@ export class HaxcmsPartyUi extends LitElement {
 
   render() {
     return html`
+      <h1 class='header'>Get the party started!</h1>
+      <br>
       <div class="user">
-        <div class="character"> 
-          ${this.character.map(name => html`
-            <rpg-character seed="${name}"></rpg-character>
-            <button id=${name} class="button" @click="${this.deleteUser}">Delete</button>
+          <div class="characterRow">
+            ${this.character.map(name => html`
+              <div class="characterContainer">
+                <rpg-character seed="${name}"></rpg-character>
+                <div class=spacer></div>
+                <div>${name}</div>
+                <button id=${name} class="button" @click="${this.deleteUser}">Delete</button>
+              </div>
+          </div>
             ${this.deleteUserPending && name === this.userToDelete ?
               html`
               <confirmation-message 

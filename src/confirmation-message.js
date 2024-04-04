@@ -6,11 +6,6 @@ export class ConfirmationMessage extends LitElement {
     return 'confirmation-message';
   }
 
-  static get properties() {
-    return {
-    };
-  }
-
   constructor() {
     super();
   }
