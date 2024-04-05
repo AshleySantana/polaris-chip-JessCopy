@@ -22,6 +22,7 @@ export class HaxcmsPartyUi extends DDD {
     this.character = [];
     this.deleteUserPending = false;
     this.userToDelete = '';
+    this.handleKeyDown = this.KeyDown.bind(this);
   }
 
   static get styles() {
@@ -30,6 +31,7 @@ export class HaxcmsPartyUi extends DDD {
         display: flex;
         flex-direction: column;
         padding: 10px;
+        font-style: var(---ddd-font-primary);
       }
 
       rpg-character{
@@ -50,6 +52,7 @@ export class HaxcmsPartyUi extends DDD {
         height: 200px;
         width: 200px;
         align-items: center;
+
       }
 
       .spacer {
@@ -133,11 +136,18 @@ export class HaxcmsPartyUi extends DDD {
       const userSubmited = this.character.toString();
       localStorage.setItem("party", userSubmited);
       console.log(localStorage.getItem("party").split(","));
-      window.alert("Invites sent to: " + localStorage.getItem("party").split(","))
+      window.alert("Success! Invites sent to: " + localStorage.getItem("party").split(","))
     } else {
       window.alert("No users provided");
     }
     ;
+  }
+
+ KeyDown(event) {
+    // Check if the pressed key is 'Enter' and if it's the input field
+    if (event.key === 'Enter' && event.target.id === 'username') {
+      this.addUser();
+    }
   }
 
   render() {
@@ -146,11 +156,11 @@ export class HaxcmsPartyUi extends DDD {
     <h1 class='header'>GET THE PARTY STARTED!</h1>
     <h3>*Usernames: lowercase letters and numbers ONLY*</h3>
       <div class="add-user">
-        <input type="text" id="username" placeholder="Type user">
+        <input type="text" id="username" placeholder="Type user" @keydown="${this.KeyDown}">
         <button class="add" @click=${this.addUser}>Add</button>
       </div>
       <div class="user-actions">
-        <button class="submit" @click="${this.makeItRain}">Submit</button>
+        <button class="submit" @click="${this.makeItRain}">Click Submit</button>
       </div>
       <div class="user">
           <div class="characterRow">

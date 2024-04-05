@@ -14,8 +14,8 @@ export class ConfirmationMessage extends LitElement {
     return css`
       .confirmation-message {
         display: flex;
-        background-color: #8abfd9;
-        width: 300px;
+        background-color: #ac8dce;
+        width: 300px; 
       }
 
     `;
