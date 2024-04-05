@@ -3,8 +3,6 @@ import { DDD } from "@lrnwebcomponents/d-d-d/d-d-d.js";
 import { ConfirmationMessage } from './confirmation-message.js';
 import "@lrnwebcomponents/rpg-character/rpg-character.js";
 
-
-
 export class HaxcmsPartyUi extends DDD {
 
   static get tag() {
@@ -85,11 +83,21 @@ export class HaxcmsPartyUi extends DDD {
 
 
   addUser() {
-    const user = this.shadowRoot.querySelector("#username").value;
-    this.character.push(user);
-    this.requestUpdate();
-    // this.shadowRoot.querySelector('#username')
+    const usernameInput = this.shadowRoot.querySelector("#username");
+    const user = usernameInput.value.trim(); 
+    const isValid = /^[a-z0-9]+$/.test(user); 
+    if (isValid && !this.character.includes(user)) {
+      this.character.push(user);
+      this.requestUpdate();
+    }else if(this.character.includes(user)) {
+      window.alert(user + " already invited");
+    } else {
+      window.alert(user + " is an invalid username. Numbers and lowercase letters ONLY");
+    }
+    usernameInput.value = "";
   }
+  
+  
 
   deleteUser(e) {
     const id = e.target.id;
@@ -113,10 +121,37 @@ export class HaxcmsPartyUi extends DDD {
     this.requestUpdate();
   }
 
+  makeItRain() {
+    if(this.character.length >= 1){
+      import("@lrnwebcomponents/multiple-choice/lib/confetti-container.js").then(
+        (module) => {
+          setTimeout(() => {
+            this.shadowRoot.querySelector("#confetti").setAttribute("popped", "");
+          }, 0);
+        }
+      )
+      const userSubmited = this.character.toString();
+      localStorage.setItem("party", userSubmited);
+      console.log(localStorage.getItem("party").split(","));
+      window.alert("Invites sent to: " + localStorage.getItem("party").split(","))
+    } else {
+      window.alert("No users provided");
+    }
+    ;
+  }
+
   render() {
     return html`
-      <h1 class='header'>Get the party started!</h1>
-      <br>
+    <confetti-container id="confetti">
+    <h1 class='header'>GET THE PARTY STARTED!</h1>
+    <h3>*Usernames: lowercase letters and numbers ONLY*</h3>
+      <div class="add-user">
+        <input type="text" id="username" placeholder="Type user">
+        <button class="add" @click=${this.addUser}>Add</button>
+      </div>
+      <div class="user-actions">
+        <button class="submit" @click="${this.makeItRain}">Submit</button>
+      </div>
       <div class="user">
           <div class="characterRow">
             ${this.character.map(name => html`
@@ -138,14 +173,10 @@ export class HaxcmsPartyUi extends DDD {
             }
           `)}
         </div>
-        <div class="add-user">
-          <input type="text" id="username" placeholder="Type user">
-          <button class="add" @click=${this.addUser}>Add</button>
-        </div>
-        <div class="user-actions">
-          <button class="submit">Submit</button>
-        </div>
+        
       </div>
+    </confetti-container>
+      
     `;
   }
 
